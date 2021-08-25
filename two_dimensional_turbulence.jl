@@ -26,7 +26,7 @@ function two_dimensional_turbulence(ν=1e-4; Nx=128, architecture=CPU(), advecti
 
     progress(sim) = @info "(ν = $ν) iteration: $(sim.model.clock.iteration), time: $(round(Int, sim.model.clock.time))"
 
-    simulation = Simulation(model, Δt=0.2, stop_time=30, iteration_interval=10, progress=progress)
+    simulation = Simulation(model, Δt=0.1, stop_time=30, iteration_interval=50, progress=progress)
 
     run!(simulation)
 
@@ -36,5 +36,20 @@ end
 u_reference = two_dimensional_turbulence()
 
 fig = heatmap(u_reference)
+
+display(fig)
+
+viscosities = [1e-5, 2e-5, 5e-5, 8e-5, 9e-5, 1.1e-5, 1.2e-4, 2e-4, 5e-4, 1e-3]
+errors = zeros(0)
+
+for ν in viscosities
+    u = two_dimensional_turbulence(ν)
+    
+    error = norm(u - u_reference) / norm(u_reference)
+    
+    push!(errors, error) 
+end
+
+fig = scatterplot(viscosities, errors)
 
 display(fig)
