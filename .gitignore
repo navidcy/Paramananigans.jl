@@ -28,3 +28,6 @@ Manifest.toml
 
 # JLD2 output
 *.jld2
+
+# Jupyter notebooks
+.ipynb_checkpoints/
